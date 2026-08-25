@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:obelixdb
+  jpa:
+    open-in-view: on
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
