@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+
+import ch.bbw.obelix.quarry.api.MenhirDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
@@ -29,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ObelixWebshopService {
+public class ObelixWebshopService implements QuarryApi {
 
 	@Lazy
 	private final ObelixWebshopController quarryWebclient;
@@ -74,6 +77,26 @@ public class ObelixWebshopService {
 		}
 		quarryWebclient.deleteById(menhirId);
 		leave();
+	}
+
+	@Override
+	public String welcome() {
+		return "";
+	}
+
+	@Override
+	public MenhirDto getMenhirById(UUID menhirId) {
+		return null;
+	}
+
+	@Override
+	public List<MenhirDto> getAllMenhirs() {
+		return List.of();
+	}
+
+	@Override
+	public void deleteById(UUID menhirId) {
+
 	}
 
 	@StandardException

@@ -1,23 +1,25 @@
 package ch.bbw.obelix.quarry.service;
 
+import ch.bbw.obelix.quarry.api.MenhirDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
+import ch.bbw.obelix.quarry.controller.ImplController;
 import ch.bbw.obelix.quarry.model.MenhirEntity;
 import ch.bbw.obelix.quarry.repository.MenhirRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MenhirService {
+public class MenhirService implements QuarryApi {
     private final MenhirRepository menhirRepository;
 
     @PostConstruct
@@ -55,4 +57,26 @@ public class MenhirService {
         menhirRepository.save(touristTrap);
     }
 
+    @Override
+    public String welcome() {
+        return "Welcome to Obelix's Menhir Shop! The finest menhirs in all of Gaul! Ces Romains sont fous!";
+    }
+
+    @Override
+    public MenhirDto getMenhirById(@PathVariable UUID menhirId) {
+        return menhirRepository.findById(menhirId)
+                .map(MenhirEntity::toDto)
+                .orElseThrow(() -> new ImplController.UnknownMenhirException("unknown menhir with id " + menhirId));
+    }
+
+    @Override
+    public List<MenhirDto> getAllMenhirs() {
+        return menhirRepository.findAll()
+                .stream().map(MenhirEntity::toDto).toList();
+    }
+
+    @Override
+    public void deleteById(@PathVariable UUID menhirId) {
+        menhirRepository.deleteById(menhirId);
+    }
 }
