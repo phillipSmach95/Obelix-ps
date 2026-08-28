@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 
 import ch.bbw.obelix.webshop.controller.ObelixWebshopController;
 import ch.bbw.obelix.webshop.dto.BasketDto;
-import ch.bbw.obelix.webshop.dto.DecorativenessDto;
+import ch.bbw.obelix.quarry.api.DecorativenessDto;
 import ch.bbw.obelix.webshop.entity.MenhirEntity;
 import ch.bbw.obelix.webshop.repository.MenhirRepository;
 import lombok.NonNull;
@@ -34,7 +34,6 @@ public class ObelixWebshopService {
 	@Lazy
 	private final ObelixWebshopController quarryWebclient;
 
-	private final MenhirRepository menhirRepository;
 
 	private BasketDto basket;
 
@@ -75,41 +74,6 @@ public class ObelixWebshopService {
 		}
 		quarryWebclient.deleteById(menhirId);
 		leave();
-	}
-
-	@PostConstruct
-	public void initializeMenhirs() {
-		// Only initialize if the database is empty
-		if (menhirRepository.count() == 0) {
-			createDefaultMenhirs();
-		}
-	}
-
-	public void createDefaultMenhirs() {
-		menhirRepository.deleteAll();
-
-		var obelixSpecial = new MenhirEntity();
-		obelixSpecial.setWeight(2.5);
-		obelixSpecial.setStoneType("Granite Gaulois");
-		obelixSpecial.setDecorativeness(MenhirEntity.Decorativeness.DECORATED);
-		obelixSpecial.setDescription("Obelix's personal favorite! Perfect for throwing at Romans. ");
-		menhirRepository.save(obelixSpecial);
-
-		var getafixMasterpiece = new MenhirEntity();
-		getafixMasterpiece.setWeight(4.2);
-		getafixMasterpiece.setStoneType("Mystical Dolmen Stone");
-		getafixMasterpiece.setDecorativeness(MenhirEntity.Decorativeness.MASTERWORK);
-		getafixMasterpiece.setDescription("Blessed by Getafix himself! This menhir is rumored to " +
-			"enhance magic potion brewing. Side effects may include: sudden urge to fight Romans.");
-		menhirRepository.save(getafixMasterpiece);
-
-		var touristTrap = new MenhirEntity();
-		touristTrap.setWeight(1.0);
-		touristTrap.setStoneType("Imported Roman Marble");
-		touristTrap.setDecorativeness(MenhirEntity.Decorativeness.PLAIN);
-		touristTrap.setDescription("Budget-friendly option! Made from 'liberated' Roman materials. " +
-			"Perfect for beginners or those who just want to annoy Caesar. Asterix approved!");
-		menhirRepository.save(touristTrap);
 	}
 
 	@StandardException

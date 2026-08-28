@@ -1,9 +1,10 @@
-package ch.bbw.obelix.webshop.repository;
+package ch.bbw.obelix.quarry.repository;
 
 import java.util.List;
 import java.util.UUID;
 
-import ch.bbw.obelix.webshop.entity.MenhirEntity;
+
+import ch.bbw.obelix.quarry.model.MenhirEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
