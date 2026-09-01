@@ -1,7 +1,7 @@
 package ch.bbw.obelix.webshop;
 
 import ch.bbw.obelix.quarry.api.QuarryApi;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ public class ObelixWebshopApplication {
 		SpringApplication.run(ObelixWebshopApplication.class, args);
 	}
 	@Bean
-	QuarryApi quarryApi(String baseUrl) {
+	QuarryApi quarryApi(@Value("${quarry.base-url}") String baseUrl) {
 		WebClient webClient = WebClient.builder()
 				.baseUrl(baseUrl)
 				.build();

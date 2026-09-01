@@ -3,7 +3,6 @@ package ch.bbw.obelix.webshop.service;
 import ch.bbw.obelix.quarry.api.DecorativenessDto;
 import ch.bbw.obelix.quarry.api.MenhirDto;
 import ch.bbw.obelix.quarry.api.QuarryApi;
-import ch.bbw.obelix.webshop.controller.ObelixWebshopController;
 import ch.bbw.obelix.webshop.dto.BasketDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -11,7 +10,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,8 +25,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ObelixWebshopService implements QuarryApi {
 
-	@Lazy
-	private final ObelixWebshopController quarryWebclient;
 	private final QuarryApi quarryApi;
 
 
