@@ -45,5 +45,4 @@ public class ObelixWebshopController {
 		obelixWebshopService.exchange(menhirId);
 	}
 
-
 }
