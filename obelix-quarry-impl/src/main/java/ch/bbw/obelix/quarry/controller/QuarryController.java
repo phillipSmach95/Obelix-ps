@@ -1,5 +1,6 @@
 package ch.bbw.obelix.quarry.controller;
 import ch.bbw.obelix.quarry.api.MenhirDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
 import ch.bbw.obelix.quarry.model.MenhirEntity;
 import ch.bbw.obelix.quarry.repository.MenhirRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-public class ImplController {
+public class QuarryController implements QuarryApi {
     private final MenhirRepository menhirRepository;
 
     @GetMapping("/api")

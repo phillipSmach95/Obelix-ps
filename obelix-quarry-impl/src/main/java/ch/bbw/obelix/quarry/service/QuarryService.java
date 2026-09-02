@@ -2,7 +2,7 @@ package ch.bbw.obelix.quarry.service;
 
 import ch.bbw.obelix.quarry.api.MenhirDto;
 import ch.bbw.obelix.quarry.api.QuarryApi;
-import ch.bbw.obelix.quarry.controller.ImplController;
+import ch.bbw.obelix.quarry.controller.QuarryController;
 import ch.bbw.obelix.quarry.model.MenhirEntity;
 import ch.bbw.obelix.quarry.repository.MenhirRepository;
 import jakarta.annotation.PostConstruct;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MenhirService implements QuarryApi {
+public class QuarryService implements QuarryApi {
     private final MenhirRepository menhirRepository;
 
     @PostConstruct
@@ -66,7 +66,7 @@ public class MenhirService implements QuarryApi {
     public MenhirDto getMenhirById(@PathVariable UUID menhirId) {
         return menhirRepository.findById(menhirId)
                 .map(MenhirEntity::toDto)
-                .orElseThrow(() -> new ImplController.UnknownMenhirException("unknown menhir with id " + menhirId));
+                .orElseThrow(() -> new QuarryController.UnknownMenhirException("unknown menhir with id " + menhirId));
     }
 
     @Override
