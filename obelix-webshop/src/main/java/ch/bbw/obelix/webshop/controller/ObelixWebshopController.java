@@ -1,10 +1,10 @@
 package ch.bbw.obelix.webshop.controller;
 
-import ch.bbw.obelix.webshop.dto.BasketDto;
-import ch.bbw.obelix.webshop.service.BasketService;
 import ch.bbw.obelix.webshop.service.ObelixWebshopService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
