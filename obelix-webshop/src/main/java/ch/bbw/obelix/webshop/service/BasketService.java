@@ -1,6 +1,7 @@
 package ch.bbw.obelix.webshop.service;
 
 import ch.bbw.obelix.quarry.api.DecorativenessDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
 import ch.bbw.obelix.webshop.dto.BasketDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -9,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -20,6 +18,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class BasketService {
     private BasketDto basket;
+    private final QuarryApi quarryApi;
     static <T> List<T> append(List<T> immutableList, T element) {
         var tmpList = new ArrayList<>(immutableList);
         tmpList.add(element);
@@ -45,5 +44,28 @@ public class BasketService {
                 } * x.count()).reduce(0, Integer::sum);
         log.info("basket worth {} vs menhir worth {} ({})", basketWorth, decorativeness, stoneWorth);
         return basketWorth >= stoneWorth;
+    }
+
+    public boolean hasItems() {
+        return basket != null && !basket.items().isEmpty();
+    }
+
+    public boolean buy(UUID id) {
+        var menhir = quarryApi.getMenhirById(id);
+        var ok = isGoodOffer(menhir.decorativeness());
+        if (ok) {
+            quarryApi.deleteById(id);
+            leave();
+        }
+        return ok;
+    }
+
+    public boolean buyFirstAvailable() {
+        var menhirs = quarryApi.getAllMenhirs();
+        if (menhirs == null || menhirs.isEmpty()) {
+            return false;
+        }
+        var first = menhirs.get(0);
+        return buy(first.id());
     }
 }

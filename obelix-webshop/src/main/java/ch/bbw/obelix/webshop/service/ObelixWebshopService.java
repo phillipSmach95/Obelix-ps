@@ -24,7 +24,6 @@ public class ObelixWebshopService {
 	private final BasketService basketService;
 
 	public void exchange(UUID menhirId) {
-		// TODO: Implement the exchange logic
 		var menhir = quarryApi.getMenhirById(menhirId);
 		var decorativeness = menhir.decorativeness();
 		if (!basketService.isGoodOffer(decorativeness)) {
@@ -32,6 +31,27 @@ public class ObelixWebshopService {
 		}
 		quarryApi.deleteById(menhirId);
 		basketService.leave();
+	}
+
+	/**
+	 * Try to exchange for the first available menhir. Returns true when successful, false otherwise.
+	 */
+	public boolean exchangeFirstAvailable() {
+		if (!basketService.hasItems()) {
+			return false;
+		}
+		var menhirs = quarryApi.getAllMenhirs();
+		if (menhirs == null || menhirs.isEmpty()) {
+			return false;
+		}
+		var first = menhirs.get(0);
+		var decorativeness = first.decorativeness();
+		if (!basketService.isGoodOffer(decorativeness)) {
+			return false;
+		}
+		quarryApi.deleteById(first.id());
+		basketService.leave();
+		return true;
 	}
 
 
