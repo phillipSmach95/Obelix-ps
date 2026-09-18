@@ -1,5 +1,6 @@
 package ch.bbw.obelix.webshop;
 
+import ch.bbw.obelix.quarry.api.DecorativenessDto;
 import ch.bbw.obelix.webshop.dto.BasketDto;
 import ch.bbw.obelix.quarry.api.MenhirDto;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,9 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.List;
+import java.util.UUID;
 
 @AutoConfigureWebTestClient
 @ActiveProfiles("test")
@@ -35,4 +39,13 @@ class ObelixWebshopApplicationTests {
 		webTestClient.post().uri("/api/basket/buy/{id}", anyId).exchange().expectStatus().isOk();
 		webTestClient.post().uri("/api/basket/buy/{id}", anyId).exchange().expectStatus().isBadRequest();
 	}
+//	@Test
+//    List<MenhirDto> getLostOfMenhirs() {
+//		webTestClient.get()
+//				.uri("/api/menhirs")
+//				.exchange()
+//				.expectBodyList(MenhirDto.class).returnResult().getResponseBody();
+//
+//
+//	}
 }

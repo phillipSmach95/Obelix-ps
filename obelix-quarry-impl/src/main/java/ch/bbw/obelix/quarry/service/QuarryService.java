@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class QuarryService implements QuarryApi {
+public class QuarryService {
     private final MenhirRepository menhirRepository;
 
     @PostConstruct
@@ -55,28 +55,5 @@ public class QuarryService implements QuarryApi {
         touristTrap.setDescription("Budget-friendly option! Made from 'liberated' Roman materials. " +
                 "Perfect for beginners or those who just want to annoy Caesar. Asterix approved!");
         menhirRepository.save(touristTrap);
-    }
-
-    @Override
-    public String welcome() {
-        return "Welcome to Obelix's Menhir Shop! The finest menhirs in all of Gaul! Ces Romains sont fous!";
-    }
-
-    @Override
-    public MenhirDto getMenhirById(@PathVariable UUID menhirId) {
-        return menhirRepository.findById(menhirId)
-                .map(MenhirEntity::toDto)
-                .orElseThrow(() -> new QuarryController.UnknownMenhirException("unknown menhir with id " + menhirId));
-    }
-
-    @Override
-    public List<MenhirDto> getAllMenhirs() {
-        return menhirRepository.findAll()
-                .stream().map(MenhirEntity::toDto).toList();
-    }
-
-    @Override
-    public void deleteById(@PathVariable UUID menhirId) {
-        menhirRepository.deleteById(menhirId);
     }
 }

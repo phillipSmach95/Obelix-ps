@@ -6,6 +6,9 @@ plugins {
 dependencies {
 	implementation project(':obelix-common')
 	implementation project(':obelix-quarry-api')
+	implementation('org.springframework.boot:spring-boot-starter-zipkin')
+	implementation platform('io.micrometer:micrometer-tracing-bom:latest.release')
+	implementation("io.micrometer:micrometer-tracing-bridge-brave:1.8.0-M1")
 }
 
 tasks.named("bootBuildImage") {

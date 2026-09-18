@@ -1,14 +1,13 @@
 package ch.bbw.obelix.webshop.controller;
 
+import ch.bbw.obelix.quarry.api.MenhirDto;
 import ch.bbw.obelix.webshop.service.ObelixWebshopService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +22,10 @@ public class ObelixWebshopController {
 		obelixWebshopService.exchange(id);
 	}
 
+	@GetMapping("/api/menhirs")
+	public List<MenhirDto> getMenhirs(){
+        return obelixWebshopService.exchangeFindAll();
+	}
 	@PostMapping({"/buy", "/buy/"})
 	public void exchangeNoId() {
 		var success = obelixWebshopService.exchangeFirstAvailable();
