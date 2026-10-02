@@ -1,8 +1,5 @@
 package ch.bbw.obelix.quarry.service;
 
-import ch.bbw.obelix.quarry.api.MenhirDto;
-import ch.bbw.obelix.quarry.api.QuarryApi;
-import ch.bbw.obelix.quarry.controller.QuarryController;
 import ch.bbw.obelix.quarry.model.MenhirEntity;
 import ch.bbw.obelix.quarry.repository.MenhirRepository;
 import jakarta.annotation.PostConstruct;
@@ -10,10 +7,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
