@@ -1,7 +1,7 @@
 package ch.bbw.obelix.webshop.service;
 
 import ch.bbw.obelix.quarry.api.DecorativenessDto;
-import ch.bbw.obelix.quarry.api.MenhirDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
 import ch.bbw.obelix.webshop.dto.BasketDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -9,7 +9,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 
@@ -19,7 +18,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BasketService {
     private BasketDto basket;
-    private final WebClient quarryApiClient;
+    private final QuarryApi quarryApi;
     static <T> List<T> append(List<T> immutableList, T element) {
         var tmpList = new ArrayList<>(immutableList);
         tmpList.add(element);
@@ -52,30 +51,17 @@ public class BasketService {
     }
 
     public boolean buy(UUID id) {
-        var menhir = quarryApiClient.get()
-                .uri("api/menhirs/{menhirId}", id)
-                .retrieve()
-                .bodyToMono(MenhirDto.class)
-                .block();
+        var menhir = quarryApi.getMenhirById(id);
         var ok = isGoodOffer(menhir.decorativeness());
         if (ok) {
-            quarryApiClient.delete()
-                    .uri("api/menhirs/{menhirId}", id)
-                    .retrieve()
-                    .toBodilessEntity()
-                    .block();
+            quarryApi.deleteById(id);
             leave();
         }
         return ok;
     }
 
     public boolean buyFirstAvailable() {
-        var menhirs = quarryApiClient.get()
-                .uri("api/menhirs")
-                .retrieve()
-                .bodyToFlux(MenhirDto.class)
-                .collectList()
-                .block();
+        var menhirs = quarryApi.getAllMenhirs();
         if (menhirs == null || menhirs.isEmpty()) {
             return false;
         }

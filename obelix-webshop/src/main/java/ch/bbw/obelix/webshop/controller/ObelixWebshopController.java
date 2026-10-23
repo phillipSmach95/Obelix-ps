@@ -11,13 +11,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/basket")
 @RequiredArgsConstructor
 public class ObelixWebshopController {
 
 	private final ObelixWebshopService obelixWebshopService;
 
-	@PostMapping("/buy/{id}")
+	@PostMapping("/api/basket/buy/{id}")
 	public void exchangeFor(@PathVariable UUID id) {
 		obelixWebshopService.exchange(id);
 	}
@@ -26,7 +25,7 @@ public class ObelixWebshopController {
 	public List<MenhirDto> getMenhirs(){
         return obelixWebshopService.exchangeFindAll();
 	}
-	@PostMapping({"/buy", "/buy/"})
+	@PostMapping({"/api/basket/buy", "/api/basket/buy/"})
 	public void exchangeNoId() {
 		var success = obelixWebshopService.exchangeFirstAvailable();
 		if (!success) {

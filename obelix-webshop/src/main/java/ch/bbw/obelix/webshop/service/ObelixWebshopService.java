@@ -1,6 +1,7 @@
 package ch.bbw.obelix.webshop.service;
 
 import ch.bbw.obelix.quarry.api.MenhirDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
@@ -8,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.service.annotation.GetExchange;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,30 +22,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ObelixWebshopService {
 
-	private final WebClient quarryApiClient;
+	private final QuarryApi quarryApi;
 	private final BasketService basketService;
 
-	@GetExchange("api/menhirs/{menhirId}")
 	public MenhirDto getMenhirById(UUID menhirId) {
-		return quarryApiClient.get()
-				.uri("api/menhirs/{menhirId}", menhirId)
-				.retrieve()
-				.bodyToMono(MenhirDto.class)
-				.block();
+		return quarryApi.getMenhirById(menhirId);
 	}
 
 
 	public void exchange(UUID menhirId) {
+		if (!basketService.hasItems()) {
+			throw new BadOfferException("The basket is empty");
+		}
 		var menhir = getMenhirById(menhirId);
 		var decorativeness = menhir.decorativeness();
 		if (!basketService.isGoodOffer(decorativeness)) {
 			throw new BadOfferException("Bad Offer: That won't even feed Idefix!");
 		}
-		quarryApiClient.delete()
-				.uri("api/menhirs/{menhirId}", menhirId)
-				.retrieve()
-				.toBodilessEntity()
-				.block();
+		quarryApi.deleteById(menhirId);
 		basketService.leave();
 	}
 
@@ -57,12 +50,7 @@ public class ObelixWebshopService {
 		if (!basketService.hasItems()) {
 			return false;
 		}
-		var menhirs = quarryApiClient.get()
-				.uri("api/menhirs")
-				.retrieve()
-				.bodyToFlux(MenhirDto.class)
-				.collectList()
-				.block();
+		var menhirs = quarryApi.getAllMenhirs();
 		if (menhirs == null || menhirs.isEmpty()) {
 			return false;
 		}
@@ -71,23 +59,14 @@ public class ObelixWebshopService {
 		if (!basketService.isGoodOffer(decorativeness)) {
 			return false;
 		}
-		quarryApiClient.delete()
-				.uri("api/menhirs/{menhirId}", first.id())
-				.retrieve()
-				.toBodilessEntity()
-				.block();
+		quarryApi.deleteById(first.id());
 		basketService.leave();
 		return true;
 	}
-	@GetExchange("api/menhirs")
+
 	public List<MenhirDto> exchangeFindAll() {
 
-		return quarryApiClient.get()
-				.uri("api/menhirs")
-				.retrieve()
-				.bodyToFlux(MenhirDto.class)
-				.collectList()
-				.block();
+		return quarryApi.getAllMenhirs();
 	}
 
 

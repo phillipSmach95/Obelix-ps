@@ -13,7 +13,7 @@ public interface QuarryApi {
 
     @GetExchange("/api")
     String welcome();
-    @GetExchange("/api/menhir/{menhirId}")
+    @GetExchange("/api/menhirs/{menhirId}")
     MenhirDto getMenhirById(@PathVariable UUID menhirId);
 
     @GetExchange("/api/menhirs")
