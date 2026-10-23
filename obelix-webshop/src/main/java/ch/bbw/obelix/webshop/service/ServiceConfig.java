@@ -18,8 +18,8 @@ public class ServiceConfig {
     }
 
     @Bean
-    public WebClient quarryApiClient() {
-        return WebClient.builder()
+    public WebClient quarryApiClient(WebClient.Builder builder) {
+        return builder
                 .baseUrl("http://localhost:8081") // Replace with the actual URL of the Quarry API
                 .build();
     }
