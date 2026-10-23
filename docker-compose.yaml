@@ -27,7 +27,7 @@ services:
       - "9090:9090"
     volumes:
       - ./docker/prometheus:/tmp/config/:ro
-    command: --config.file=/tmp/config/prometheus.yaml
+    command: --config.file=/tmp/config/prometheus.yml
   #    depends_on:
   #      - obelix-webshop
   #      - obelix-quarry
